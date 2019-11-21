@@ -26,6 +26,15 @@ public class TransformingOperators {
                 .subscribe(s -> processBufferData(s));
     }
 
+    /*
+        Map can be used for applying a function on the top of each item and transform it into a new item. 
+     */
+    public void testUsingMap() {
+        Observable.fromArray(new String[]{"First", "Second", "Third"})
+                .map(s -> {return s.toUpperCase();})
+                .subscribe(res -> System.out.println(res));
+    }
+
     // This will a List of items for every interval amount of time
     public void testUsingBufferForInterval() throws InterruptedException {
         Observable.interval(1, TimeUnit.SECONDS)
