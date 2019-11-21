@@ -8,12 +8,42 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 public class ObservableCreaction {
 
     private static void createdObservableUsingJust() {
         Observable<String> observable = Observable.just("This is my first obervable");
         observable.subscribe(s -> System.out.println(s));
+    }
+
+    // Generate observable values from start to end - 1.
+    private static void createdObservableUsingRange(int start, int end) {
+        Observable.range(start, end).subscribe(num -> System.out.println(num));
+    }
+
+    // Repeat n times of the source observable
+    private static void createdObservableUsingRepeat() {
+        Observable.range(1, 6)
+                .repeat(3)
+                .subscribe(num -> System.out.println(num));
+    }
+
+    // By default Interval operator will run within a thread in a computation scheduler
+    private static void createdObservableUsingInterval() throws InterruptedException {
+        Observable.interval(3, TimeUnit.SECONDS)
+                .doOnNext(s -> System.out.println(Thread.currentThread().getName()))
+                .subscribe(num -> System.out.println(num));
+
+        Thread.sleep(10000);
+    }
+
+    // By default Interval operator will run within a thread in a computation scheduler
+    private static void createdObservableUsingTimer() throws InterruptedException {
+        Observable.timer(3, TimeUnit.SECONDS)
+                .doOnNext(s -> System.out.println(Thread.currentThread().getName()))
+                .subscribe(num -> System.out.println(num));
+        Thread.sleep(5000);
     }
 
     private static void createdObservableFromArray() {
@@ -43,11 +73,15 @@ public class ObservableCreaction {
         service.shutdown();
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         // createdUsingJust();
         // createdUsingFromArray();
         // createdUsingFromIterable();
         // createdCompletableFromRunnable();
-        createdObervableFromFuture();
+        // createdObervableFromFuture();
+        // createdObservableUsingRange(0, 10);
+        // createdObservableUsingRepeat();
+        // createdObservableUsingInterval();
+        createdObservableUsingTimer();
     }
 }
