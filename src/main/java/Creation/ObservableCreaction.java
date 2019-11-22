@@ -1,6 +1,8 @@
 package Creation;
 
 import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,6 +13,29 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 public class ObservableCreaction {
+
+    /*
+        Below snipit has same functionality with:
+        Observable.just("First One", "Second One", "Last One").subscribe(s -> System.out.println(s));
+
+        By creating the observable manually using Create operator, you have more control of the items that you want to emit.
+        Nice article explaining difference between Rxjava 1.x and Rxjava 2.x.
+        https://juejin.im/post/58ce6cb2b123db3f6b3fcd2d
+
+        Another nice blog explaining how observable and subscriber.
+        https://juejin.im/post/580103f20e3dd90057fc3e6d
+     */
+    private static void createdObservableUsingCreate() {
+        Observable.create(new ObservableOnSubscribe<String>() {
+            @Override
+            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+                emitter.onNext("First One");
+                emitter.onNext("Second One");
+                emitter.onNext("Last One");
+                emitter.onComplete();
+            }
+        }).subscribe(s -> System.out.println(s));
+    }
 
     private static void createdObservableUsingJust() {
         Observable<String> observable = Observable.just("This is my first obervable");
@@ -82,6 +107,7 @@ public class ObservableCreaction {
         // createdObservableUsingRange(0, 10);
         // createdObservableUsingRepeat();
         // createdObservableUsingInterval();
-        createdObservableUsingTimer();
+        // createdObservableUsingTimer();
+        createdObservableUsingCreate();
     }
 }
