@@ -27,7 +27,7 @@ public class TransformingOperators {
     }
 
     /*
-        Map can be used for applying a function on the top of each item and transform it into a new item. 
+        Map can be used for applying a function on the top of each item and transform it into a new item.
      */
     public void testUsingMap() {
         Observable.fromArray(new String[]{"First", "Second", "Third"})
