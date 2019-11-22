@@ -80,6 +80,15 @@ public class TransformingOperators {
                 .subscribe(groupedObservable -> groupedObservable.subscribe(num -> System.out.println("Group ID:" + groupedObservable.getKey() + "Value:" + String.valueOf(num))));
     }
 
+    /*
+
+     */
+    public void testUsingScan() {
+        Observable.range(0, 10)
+                .scan((x, y) -> x + y)
+                .subscribe(num -> System.out.println(num));
+    }
+
     // This will a List of items for every interval amount of time
     public void testUsingBufferForInterval() throws InterruptedException {
         Observable.interval(1, TimeUnit.SECONDS)
