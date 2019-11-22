@@ -70,6 +70,16 @@ public class TransformingOperators {
                 .subscribeOn(Schedulers.computation());
     }
 
+    /*
+        The return value of groupBy is a Observable with a type as GroupedObservable<K, T> which is a class that extends Observable class.
+
+     */
+    public void testUsingGroupBy() {
+        Observable.range(0, 10)
+                .groupBy(num -> num % 3)
+                .subscribe(groupedObservable -> groupedObservable.subscribe(num -> System.out.println("Group ID:" + groupedObservable.getKey() + "Value:" + String.valueOf(num))));
+    }
+
     // This will a List of items for every interval amount of time
     public void testUsingBufferForInterval() throws InterruptedException {
         Observable.interval(1, TimeUnit.SECONDS)
