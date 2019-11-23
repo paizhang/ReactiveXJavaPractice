@@ -17,4 +17,17 @@ public class FilterOperators {
 
         Thread.sleep(10000);
     }
+
+    /*
+        The only difference between throttleWithTimeout and debounce is that debounce can take a function as an input instead of a timespan.
+        If a new observable is emitted before the end of the execution for current observable, current execution will be terminated and ignore.
+        Then it will start the execute the function for the new observable.
+     */
+    public void testUsingDebounce() throws InterruptedException {
+        Observable.interval(1, TimeUnit.SECONDS)
+                .debounce(1500, TimeUnit.MILLISECONDS)
+                .subscribe(num -> System.out.println(num));
+
+        Thread.sleep(10000);
+    }
 }
