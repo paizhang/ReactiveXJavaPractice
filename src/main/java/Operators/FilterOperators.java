@@ -30,4 +30,30 @@ public class FilterOperators {
 
         Thread.sleep(10000);
     }
+
+    public void testUsingDistinct() {
+        Observable.just(0, 1, 2, 2, 3, 4, 3, 7)
+                .distinct()
+                .subscribe(num -> System.out.println(num));
+    }
+
+    /*
+        distinct(Func) operator take a function as a input. This function will generate a key from the source observable. And it is this key which
+        will be used to distinct those upstream observables. 
+     */
+    public void testUsingDistinctWithFunc() {
+        Observable.just(1, 0.1, true, "Yes", 2, "No", 5)
+                .distinct(item -> {
+                    if (item instanceof Integer) {
+                        return "Int";
+                    } else if (item instanceof String) {
+                        return "String";
+                    } else if (item instanceof Boolean) {
+                        return "Boolean";
+                    } else {
+                        return "Others";
+                    }
+                })
+                .subscribe(item -> System.out.println(item));
+    }
 }
