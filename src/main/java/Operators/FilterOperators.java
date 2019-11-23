@@ -39,7 +39,7 @@ public class FilterOperators {
 
     /*
         distinct(Func) operator take a function as a input. This function will generate a key from the source observable. And it is this key which
-        will be used to distinct those upstream observables. 
+        will be used to distinct those upstream observables.
      */
     public void testUsingDistinctWithFunc() {
         Observable.just(1, 0.1, true, "Yes", 2, "No", 5)
@@ -55,5 +55,15 @@ public class FilterOperators {
                     }
                 })
                 .subscribe(item -> System.out.println(item));
+    }
+
+    /*
+        The elementAt operator will emit a solitary item with specific index.
+        If the item cannot be found, it can throw an exception or return a default item.  
+     */
+    public void testUsingElementAt() {
+        Observable.just(1, 2, 3, 4, 5)
+                .elementAt(7, 0)
+                .subscribe(num -> System.out.println(num));
     }
 }
