@@ -89,6 +89,19 @@ public class TransformingOperators {
                 .subscribe(num -> System.out.println(num));
     }
 
+    public void testUsingWindowForCount() {
+        Observable.range(0,20)
+                .window(5)
+                .subscribe(obs -> {System.out.println("OnNext"); obs.subscribe(num -> System.out.println(num));});
+    }
+
+    public void testUsingWindowForTimespan() throws InterruptedException {
+        Observable.interval(1, TimeUnit.SECONDS)
+                .window(3, TimeUnit.SECONDS)
+                .subscribe(obs -> {System.out.println("OnNext"); obs.subscribe(num -> System.out.println(num));});
+        Thread.sleep(20000);
+    }
+
     // This will a List of items for every interval amount of time
     public void testUsingBufferForInterval() throws InterruptedException {
         Observable.interval(1, TimeUnit.SECONDS)
