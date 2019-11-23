@@ -59,11 +59,20 @@ public class FilterOperators {
 
     /*
         The elementAt operator will emit a solitary item with specific index.
-        If the item cannot be found, it can throw an exception or return a default item.  
+        If the item cannot be found, it can throw an exception or return a default item.
      */
     public void testUsingElementAt() {
         Observable.just(1, 2, 3, 4, 5)
                 .elementAt(7, 0)
+                .subscribe(num -> System.out.println(num));
+    }
+
+    /*
+        Only emit items that satisfy a specific filter condition which is defined in the filter operator.
+     */
+    public void testUsingFilter() {
+        Observable.range(0, 10)
+                .filter(x -> x % 2 == 0)
                 .subscribe(num -> System.out.println(num));
     }
 }
