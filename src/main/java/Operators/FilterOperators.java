@@ -75,4 +75,16 @@ public class FilterOperators {
                 .filter(x -> x % 2 == 0)
                 .subscribe(num -> System.out.println(num));
     }
+
+    public void testUsingFirstWithDefault() {
+        Observable.range(0, 10)
+                .first(100)
+                .subscribe(num -> System.out.println(num));
+    }
+
+    public void testUsingFirstOrError() {
+        Observable.empty()
+                .firstOrError()
+                .subscribe(num -> System.out.println(num), throwable -> {System.out.println(throwable.toString());});
+    }
 }
