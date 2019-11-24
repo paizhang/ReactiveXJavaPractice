@@ -87,4 +87,13 @@ public class FilterOperators {
                 .firstOrError()
                 .subscribe(num -> System.out.println(num), throwable -> {System.out.println(throwable.toString());});
     }
+
+    /*
+        Note that the output of ignoreElement is a Completable.
+     */
+    public void testUsingIgnoreElements() {
+        Observable.range(0, 5)
+                .ignoreElements()
+                .subscribe(() -> System.out.println("Completed!"));
+    }
 }
