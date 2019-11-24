@@ -96,4 +96,23 @@ public class FilterOperators {
                 .ignoreElements()
                 .subscribe(() -> System.out.println("Completed!"));
     }
+
+    public void testUsingLast() {
+        Observable.range(0, 5)
+                .last(10)
+                .subscribe((num) -> System.out.println("Existed: " + num));
+
+        Observable.empty()
+                .last(10)
+                .subscribe((num) -> System.out.println("Empty: " + num));
+    }
+
+    /*
+        Note that lastElement operator will return a Maybe<T> observable.
+     */
+    public void testUsingLastElement() {
+        Observable.empty()
+                .lastElement()
+                .subscribe((num) -> System.out.println(num), (throwable) -> System.out.println(throwable.toString()));
+    }
 }
