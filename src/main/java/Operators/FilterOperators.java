@@ -115,4 +115,15 @@ public class FilterOperators {
                 .lastElement()
                 .subscribe((num) -> System.out.println(num), (throwable) -> System.out.println(throwable.toString()));
     }
+
+    /*
+        This operator will periodically sample the latest emitted item. 
+     */
+    public void testUsingSample() throws InterruptedException {
+        Observable.interval(1, TimeUnit.SECONDS)
+                .sample(2, TimeUnit.SECONDS)
+                .subscribe((num) -> System.out.println(num));
+
+        Thread.sleep(10000);
+    }
 }
