@@ -138,7 +138,7 @@ public class FilterOperators {
     }
 
     /*
-        Skip operator with a specific time span will skip items emitted within this time span and emit the following items. 
+        Skip operator with a specific time span will skip items emitted within this time span and emit the following items.
      */
     public void testUsingSkipWithTimespan() throws InterruptedException {
         Observable.interval(1, TimeUnit.SECONDS)
@@ -146,5 +146,31 @@ public class FilterOperators {
                 .subscribe((num) -> System.out.println(num));
 
         Thread.sleep(10000);
+    }
+
+    public void testUsingSkipLastWithCount() {
+        Observable.range(0, 10)
+                .skipLast(5)
+                .subscribe((num) -> System.out.println(num));
+    }
+
+    public void testUsingSkipLastWithTimespan() throws InterruptedException {
+        Observable.interval(1, TimeUnit.SECONDS)
+                .skipLast(3, TimeUnit.SECONDS)
+                .subscribe((num) -> System.out.println(num));
+
+        Thread.sleep(10000);
+    }
+
+    public void testUsingTake() {
+        Observable.range(0 ,10)
+                .take(5)
+                .subscribe((num) -> System.out.println(num));
+    }
+
+    public void testUsingTakeLast() {
+        Observable.range(0, 1)
+                .takeLast(2)
+                .subscribe((num) -> System.out.println(num));
     }
 }
