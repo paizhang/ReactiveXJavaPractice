@@ -117,11 +117,32 @@ public class FilterOperators {
     }
 
     /*
-        This operator will periodically sample the latest emitted item. 
+        This operator will periodically sample the latest emitted item.
      */
     public void testUsingSample() throws InterruptedException {
         Observable.interval(1, TimeUnit.SECONDS)
                 .sample(2, TimeUnit.SECONDS)
+                .subscribe((num) -> System.out.println(num));
+
+        Thread.sleep(10000);
+    }
+
+    /*
+        This operator will skip the first n items and emit following items.
+        If n is greater than the total items, it will call the OnComplete.
+     */
+    public void testUsingSkipWithCount() {
+        Observable.range(0, 10)
+                .skip(5)
+                .subscribe((num) -> {System.out.println("OnNext: ");System.out.println(num);}, throwable -> {}, () -> System.out.println("Completed!"));
+    }
+
+    /*
+        Skip operator with a specific time span will skip items emitted within this time span and emit the following items. 
+     */
+    public void testUsingSkipWithTimespan() throws InterruptedException {
+        Observable.interval(1, TimeUnit.SECONDS)
+                .skip(3, TimeUnit.SECONDS)
                 .subscribe((num) -> System.out.println(num));
 
         Thread.sleep(10000);
