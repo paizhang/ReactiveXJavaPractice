@@ -1,6 +1,9 @@
 package Operators;
 
 import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.ObservableSource;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -129,5 +132,24 @@ public class CombiningOperators {
         Observable.just(100)
                 .startWith(new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5)))
                 .subscribe(num -> System.out.println(num));
+    }
+
+    /*
+        Let's say we have several observables started to emit items at different points of time.
+        This operator will output one observable which will always emit items that are emitted by the latest started source observable.
+     */
+    public void testUsingSwitchOnNext() {
+        Observable.switchOnNext(Observable.create(
+                new ObservableOnSubscribe<ObservableSource<Long>>() {
+                    @Override
+                    public void subscribe(ObservableEmitter<ObservableSource<Long>> observableEmitter) throws Exception {
+                        for (int i = 0; i < 5; i++) {
+                            observableEmitter.onNext(Observable.interval(1, TimeUnit.SECONDS));
+
+                            Thread.sleep(5000);
+                        }
+                    }
+                }
+        )).subscribe(num -> System.out.println(num));
     }
 }
