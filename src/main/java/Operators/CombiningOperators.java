@@ -4,6 +4,7 @@ import io.reactivex.Observable;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -115,5 +116,18 @@ public class CombiningOperators {
                 .subscribe(num -> System.out.println(num));
     }
 
+    /*
+        This operator will emit a specific sequence of items before emitting the items from the source observable.
+     */
+    public void testUsingStartWith() {
+        System.out.println("Example #1");
+        Observable.range(0, 5)
+                .startWith(100)
+                .subscribe(num -> System.out.println(num));
 
+        System.out.println("Example #2");
+        Observable.just(100)
+                .startWith(new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5)))
+                .subscribe(num -> System.out.println(num));
+    }
 }
