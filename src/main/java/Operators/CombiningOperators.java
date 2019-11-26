@@ -3,6 +3,8 @@ package Operators;
 import io.reactivex.Observable;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class CombiningOperators {
@@ -75,4 +77,43 @@ public class CombiningOperators {
 
         Thread.sleep(20000);
     }
+
+    /*
+        This operator will merge multiple observables into one observable.
+     */
+    public void testUsingMerge() throws InterruptedException {
+        System.out.println("Example #1");
+        Observable<Integer> obs1 = Observable.range(0, 5);
+        Observable<Integer> obs2 = Observable.range(7, 5);
+        Observable.merge(obs1, obs2)
+                .subscribe(num -> System.out.println(num));
+
+        System.out.println("Example #2");
+        Observable<Long> obs3 = Observable.interval(1, TimeUnit.SECONDS);
+        Observable<Long> obs4 = Observable.interval(2, TimeUnit.SECONDS);
+        Observable.merge(obs3, obs4)
+            .subscribe(num -> System.out.println(num));
+        Thread.sleep(10000);
+
+        System.out.println("Example #3");
+        Observable<Integer> obs5 = Observable.range(15, 5);
+        List<Observable<Integer>> list = new ArrayList<>();
+        list.add(obs1);
+        list.add(obs2);
+        list.add(obs5);
+        Observable.merge(list)
+                .subscribe(num -> System.out.println(num));
+    }
+
+    /*
+        This operator will merge the source observable with another observable.
+     */
+    public void testUsingMergeWith() {
+        Observable<Integer> obs = Observable.range(0, 5);
+        Observable.range(6, 5)
+                .mergeWith(obs)
+                .subscribe(num -> System.out.println(num));
+    }
+
+
 }
