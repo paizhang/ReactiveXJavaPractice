@@ -5,12 +5,9 @@ import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 
 public class ErrorHandlingOperators {
-    /*
-        OnErrorReturn will intercept an error from the source observable and convert it into an specific obervable and terminate the source observable by
-        calling onComplete of the observer.  
-     */
-    public void testUsingOnErrorReturn() {
-        Observable.create(new ObservableOnSubscribe<String>() {
+
+    private Observable createObservableEmittingErrorAndItems() {
+        return Observable.create(new ObservableOnSubscribe<String>() {
             @Override
             public void subscribe(ObservableEmitter<String> observableEmitter) throws Exception {
                 for (int i = 0; i < 6; i++) {
@@ -25,7 +22,24 @@ public class ErrorHandlingOperators {
                     }
                 }
             }
-        }).onErrorReturn(throwable -> "This is returned from onErrorReturn")
+        });
+    }
+
+    /*
+        OnErrorReturn will intercept an error from the source observable and convert it into an specific obervable and terminate the source observable by
+        calling onComplete of the observer.
+     */
+    public void testUsingOnErrorReturn() {
+        createObservableEmittingErrorAndItems().onErrorReturn(throwable -> "This is returned from onErrorReturn")
+                .subscribe(s -> System.out.println("OnNext:" + s), throwable -> System.out.println("OnError:" + throwable.toString()), () -> System.out.println("Completed!"));
+    }
+
+    /*
+        OnErrorResumeNext() operator will intercepts an error from the source observable and convert it into a specific obervable, then terminate the source
+        observable by calling the onComplete() function of observer.
+     */
+    public void testUsingOnErrorResumeNext() {
+        createObservableEmittingErrorAndItems().onErrorResumeNext(Observable.just(1, 2, 3))
                 .subscribe(s -> System.out.println("OnNext:" + s), throwable -> System.out.println("OnError:" + throwable.toString()), () -> System.out.println("Completed!"));
     }
 }
