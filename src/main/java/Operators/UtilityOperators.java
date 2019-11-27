@@ -37,4 +37,22 @@ public class UtilityOperators {
         Thread.sleep(10000);
     }
 
+    /*
+        This is a good example showing what the order of the calls for do family operators.  
+     */
+    public void testUsingDoOperators() {
+        Observable.just(1, 2, 3)
+                .doOnNext(num -> System.out.println("doOnNext:" + num))
+                .doAfterNext(num -> System.out.println("doAfterNext:" + num))
+                .doOnError(throwable -> {System.out.println("doOnError.");})
+                .doOnComplete(() -> System.out.println("doOnComplete"))
+                .doOnSubscribe((s) -> System.out.println("doOnSubscribe"))
+                .doOnTerminate(() -> System.out.println("doOnTerminate"))
+                .doAfterTerminate(() -> System.out.println("doAfterTerminate"))
+                .subscribe(s -> {System.out.println("OnNext:" + s);},
+                        throwable -> System.out.println("OnError:" + throwable.toString()),
+                        () -> System.out.println("Completed!"));
+
+    }
+
 }
