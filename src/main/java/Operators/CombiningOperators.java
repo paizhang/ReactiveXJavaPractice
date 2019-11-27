@@ -4,6 +4,8 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.ObservableSource;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Function;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -151,5 +153,50 @@ public class CombiningOperators {
                     }
                 }
         )).subscribe(num -> System.out.println(num));
+    }
+
+    /*
+        This operator will zip multiple source observables into one observable, in sequence. For example, the first item emitted by the first observable
+        will match with the first item emitted by the second observable. The second item emitted by the first observable will match with the second
+        item emitted by the second observable. It will only emit as many items as the number of items emitted by the source Observable that emits the fewest items.
+     */
+    public void testUsingZip() throws InterruptedException {
+        System.out.println("Example #1");
+        Observable<Integer> obs1 = Observable.range(0, 5);
+        Observable<Integer> obs2 = Observable.range(10, 5);
+
+        Observable.zip(obs1, obs2, (item1, item2) -> item1 + ":" + item2)
+                .subscribe(res -> System.out.println(res));
+
+        System.out.println("Example #2");
+        Observable<Long> obs3 = Observable.interval(1, TimeUnit.SECONDS);
+        Observable<Long> obs4 = Observable.interval(2, TimeUnit.SECONDS);
+        Observable.zip(obs3, obs4, (item1, item2) -> item1 + ":" + item2)
+                .subscribe(res -> System.out.println(res));
+
+        Thread.sleep(20000);
+
+        System.out.println("Example #3");
+        Observable<Integer> obs5 = Observable.range(20, 5);
+        List<Observable<Integer>> list = new ArrayList<>(Arrays.asList(obs1, obs2, obs5));
+
+        Observable.zip(list, new Function<Object[], String>() {
+            @Override
+            public String apply(@NonNull Object[] objects) {
+                String ret = "";
+                for (Object num : objects) {
+                    ret += String.valueOf(num);
+                }
+                return ret;
+            }
+        })
+        .subscribe(s -> System.out.println(s));
+    }
+
+    public void testUsingZipWith() {
+        Observable<Integer> obs1 = Observable.range(0, 5);
+        Observable.range(10, 5)
+                .zipWith(obs1, (item1, item2) -> item1 + ":" + item2)
+                .subscribe(s -> System.out.println(s));
     }
 }
