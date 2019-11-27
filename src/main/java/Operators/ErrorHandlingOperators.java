@@ -1,8 +1,7 @@
 package Operators;
 
-import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.*;
+import io.reactivex.functions.Function;
 
 public class ErrorHandlingOperators {
 
@@ -18,7 +17,7 @@ public class ErrorHandlingOperators {
                     if (i % 2 == 0) {
                         observableEmitter.onNext("Item: " + String.valueOf(i));
                     } else {
-                        observableEmitter.onError(new Exception("Error"));
+                        observableEmitter.onError(new Throwable("Error"));
                     }
                 }
             }
@@ -49,6 +48,45 @@ public class ErrorHandlingOperators {
      */
     public void testUsingOnExceptionResumeNext() {
         createObservableEmittingErrorAndItems().onExceptionResumeNext(Observable.just(1, 2, 3, 4, 5))
+                .subscribe(s -> System.out.println("OnNext:" + s), throwable -> System.out.println("OnError:" + throwable.toString()), () -> System.out.println("Completed!"));
+    }
+
+    /*
+        It will try to resubscribe the observable when getting a throwable from the source observable. It will keep retrying.
+     */
+    public void testUsingRetryWithoutParameter() {
+        createObservableEmittingErrorAndItems().retry()
+                .subscribe(s -> System.out.println("OnNext:" + s), throwable -> System.out.println("OnError:" + throwable.toString()), () -> System.out.println("Completed!"));
+    }
+
+    /*
+        It will try to resubscribe the observable within the specific times.
+     */
+    public void testUsingRetryWithLimitedTimes() {
+        createObservableEmittingErrorAndItems().retry(3)
+                .subscribe(s -> System.out.println("OnNext:" + s), throwable -> System.out.println("OnError:" + throwable.toString()), () -> System.out.println("Completed!"));
+    }
+
+    /*
+        This operator will apply a function to decide whether or not the error type thrown from the upstream is retryable.
+        The input of this function is Observable<Throwable>. The output of this function is Observable<T>.
+        This function will be triggered when there the upstream emit an error observable.
+        Usually we apply a flatMap operator to the throwable observable to convert it into a target output observable.
+        Nice article for explaining this operator with repeatWhen operator. 
+     */
+    public void testUsingRetryWhen() {
+        createObservableEmittingErrorAndItems()
+                .retryWhen(new Function<Observable<Throwable>, ObservableSource<?>>() {
+                    @Override
+                    public ObservableSource<?> apply(Observable<Throwable> throwableObservable) throws Exception {
+                        return throwableObservable.flatMap(throwable -> {
+                            if (throwable instanceof Exception)
+                                return Observable.just("Retry");
+
+                            return Observable.error(new Throwable("Terminate."));
+                        });
+                    }
+                })
                 .subscribe(s -> System.out.println("OnNext:" + s), throwable -> System.out.println("OnError:" + throwable.toString()), () -> System.out.println("Completed!"));
     }
 }
