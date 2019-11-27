@@ -18,7 +18,7 @@ public class ErrorHandlingOperators {
                     if (i % 2 == 0) {
                         observableEmitter.onNext("Item: " + String.valueOf(i));
                     } else {
-                        observableEmitter.onError(new Throwable("Error"));
+                        observableEmitter.onError(new Exception("Error"));
                     }
                 }
             }
@@ -40,6 +40,15 @@ public class ErrorHandlingOperators {
      */
     public void testUsingOnErrorResumeNext() {
         createObservableEmittingErrorAndItems().onErrorResumeNext(Observable.just(1, 2, 3))
+                .subscribe(s -> System.out.println("OnNext:" + s), throwable -> System.out.println("OnError:" + throwable.toString()), () -> System.out.println("Completed!"));
+    }
+
+    /*
+        This operator is much like the onErrorResumeNext. But this operator will check the type of Throwable. If the type is Exception, it will convert it into
+        a specific observable and terminate the source observable by calling onComplete function. Otherwise, it will pass it to onError() of the observer.
+     */
+    public void testUsingOnExceptionResumeNext() {
+        createObservableEmittingErrorAndItems().onExceptionResumeNext(Observable.just(1, 2, 3, 4, 5))
                 .subscribe(s -> System.out.println("OnNext:" + s), throwable -> System.out.println("OnError:" + throwable.toString()), () -> System.out.println("Completed!"));
     }
 }
