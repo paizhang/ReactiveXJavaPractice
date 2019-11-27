@@ -72,9 +72,10 @@ public class ErrorHandlingOperators {
         The input of this function is Observable<Throwable>. The output of this function is Observable<T>.
         This function will be triggered when there the upstream emit an error observable.
         Usually we apply a flatMap operator to the throwable observable to convert it into a target output observable.
-        Nice article for explaining this operator with repeatWhen operator. 
+        Nice article for explaining this operator with repeatWhen operator.
      */
     public void testUsingRetryWhen() {
+        System.out.println("Example #1");
         createObservableEmittingErrorAndItems()
                 .retryWhen(new Function<Observable<Throwable>, ObservableSource<?>>() {
                     @Override
@@ -88,5 +89,16 @@ public class ErrorHandlingOperators {
                     }
                 })
                 .subscribe(s -> System.out.println("OnNext:" + s), throwable -> System.out.println("OnError:" + throwable.toString()), () -> System.out.println("Completed!"));
+
+        System.out.println("Example #2");
+        createObservableEmittingErrorAndItems()
+                .retryWhen(new Function<Observable<Throwable>, ObservableSource<?>>() {
+                    @Override
+                    public ObservableSource<?> apply(Observable<Throwable> throwableObservable) throws Exception {
+                        return throwableObservable.zipWith(Observable.range(1, 3), (item, i) -> i);
+                    }
+                })
+                .subscribe(s -> System.out.println("OnNext:" + s), throwable -> System.out.println("OnError:" + throwable.toString()), () -> System.out.println("Completed!"));
+
     }
 }
