@@ -1,6 +1,8 @@
 package Operators;
 
 import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 
 import java.sql.Timestamp;
 import java.util.concurrent.TimeUnit;
@@ -38,7 +40,7 @@ public class UtilityOperators {
     }
 
     /*
-        This is a good example showing what the order of the calls for do family operators.  
+        This is a good example showing what the order of the calls for do family operators.
      */
     public void testUsingDoOperators() {
         Observable.just(1, 2, 3)
@@ -53,6 +55,37 @@ public class UtilityOperators {
                         throwable -> System.out.println("OnError:" + throwable.toString()),
                         () -> System.out.println("Completed!"));
 
+    }
+
+    /*
+        doOnEach operator basically will be triggered every time before onNext or onError or onComplete is called.
+        TODO: Investigate what the functionality of disposable is. 
+     */
+    public void testUsingDoOnEach() {
+        Observable.just(1, 2, 3)
+                .doOnEach(new Observer<Integer>() {
+                    @Override
+                    public void onComplete() {
+                        System.out.println("doOnEach onComplete. ");
+                    }
+
+                    @Override
+                    public void onNext(Integer integer) {
+                        System.out.println("doOnEach onNext.");
+                    }
+
+                    @Override
+                    public void onError(Throwable throwable) {
+                        System.out.println("doOnEach onError:" + throwable.toString());
+                    }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                       System.out.println("doOnEach onSubscribe.");
+                    }
+                }).subscribe(s -> {System.out.println("OnNext:" + s);},
+                throwable -> System.out.println("OnError:" + throwable.toString()),
+                () -> System.out.println("Completed!"));
     }
 
 }
