@@ -139,7 +139,7 @@ public class UtilityOperators {
     }
 
     /*
-        This operator will emit an error when the time span between emissions reached the specific span of time. 
+        This operator will emit an error when the time span between emissions reached the specific span of time.
      */
     public void testUsingTimeoutWithoutBackupObservable() throws InterruptedException {
         Observable.interval(3, TimeUnit.SECONDS)
@@ -163,6 +163,19 @@ public class UtilityOperators {
                         throwable -> System.out.println("OnError:" + throwable.toString()),
                         () -> System.out.println("Completed!"));
 
+        Thread.sleep(5000);
+    }
+
+    /*
+        This operator will convert each emitted item into a Timed<T> type. Basically it add a timestamp for each original item.
+        We can call t.value() to get the original value and t.time() to get the current milliseconds based timestamp.
+     */
+    public void testUsingTimestamp() throws InterruptedException {
+        Observable.interval(1, TimeUnit.SECONDS)
+                .timestamp()
+                .subscribe(s -> {System.out.println("OnNext:" + new Timestamp(s.time()));},
+                        throwable -> System.out.println("OnError:" + throwable.toString()),
+                        () -> System.out.println("Completed!"));
         Thread.sleep(5000);
     }
 
