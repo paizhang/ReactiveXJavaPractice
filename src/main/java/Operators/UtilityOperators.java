@@ -1,10 +1,17 @@
 package Operators;
 
 import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
 public class UtilityOperators {
@@ -177,6 +184,34 @@ public class UtilityOperators {
                         throwable -> System.out.println("OnError:" + throwable.toString()),
                         () -> System.out.println("Completed!"));
         Thread.sleep(5000);
+    }
+
+    /*
+        This operator will create a resource that can be consumed by a source observable during the lifespan of the observable. It also specify
+        a disposable method which will be called to release the resource before terminating the observable. 
+     */
+    public void testUsingUsing() {
+        Observable.using(new Callable<List<Integer>>() {
+                             @Override
+                             public List<Integer> call() {
+                                 return new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5));
+                             }
+                         },
+                new Function<List<Integer>, ObservableSource<?>>() {
+                    @Override
+                    public ObservableSource<?> apply(List<Integer> integers) throws Exception {
+                        return Observable.fromIterable(integers);
+                    }
+                },
+                new Consumer<List<Integer>>() {
+                    @Override
+                    public void accept(List<Integer> integers) {
+                        System.out.println("Realise. ");
+                    }
+                })
+                .subscribe(s -> {System.out.println("OnNext:" + s);},
+                        throwable -> System.out.println("OnError:" + throwable.toString()),
+                        () -> System.out.println("Completed!"));
     }
 
 }
