@@ -138,4 +138,32 @@ public class UtilityOperators {
         Thread.sleep(10000);
     }
 
+    /*
+        This operator will emit an error when the time span between emissions reached the specific span of time. 
+     */
+    public void testUsingTimeoutWithoutBackupObservable() throws InterruptedException {
+        Observable.interval(3, TimeUnit.SECONDS)
+                .timeout(2, TimeUnit.SECONDS)
+                .subscribe(s -> {System.out.println("OnNext:" + s);},
+                        throwable -> System.out.println("OnError:" + throwable.toString()),
+                        () -> System.out.println("Completed!"));
+
+        Thread.sleep(5000);
+    }
+
+    /*
+        Instead of emitting an error when reaching the timeout, this variant of timeout operator will emit a backup observable and
+        then call onComplete to terminate the observable.
+        TODO: I try to put Observable.just(1) as the third paramater of the operator but it showed error for method cannot be resolved. Why?
+     */
+    public void testUsingTimeoutWithBackupObservable() throws InterruptedException {
+        Observable.interval(3, TimeUnit.SECONDS)
+                .timeout(2, TimeUnit.SECONDS, Observable.empty())
+                .subscribe(s -> {System.out.println("OnNext:" + s);},
+                        throwable -> System.out.println("OnError:" + throwable.toString()),
+                        () -> System.out.println("Completed!"));
+
+        Thread.sleep(5000);
+    }
+
 }
