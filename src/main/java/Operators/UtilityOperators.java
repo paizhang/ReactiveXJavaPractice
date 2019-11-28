@@ -59,7 +59,7 @@ public class UtilityOperators {
 
     /*
         doOnEach operator basically will be triggered every time before onNext or onError or onComplete is called.
-        TODO: Investigate what the functionality of disposable is. 
+        TODO: Investigate what the functionality of disposable is.
      */
     public void testUsingDoOnEach() {
         Observable.just(1, 2, 3)
@@ -86,6 +86,41 @@ public class UtilityOperators {
                 }).subscribe(s -> {System.out.println("OnNext:" + s);},
                 throwable -> System.out.println("OnError:" + throwable.toString()),
                 () -> System.out.println("Completed!"));
+    }
+
+    /*
+        This is operator is used to encapsulate emitted observables into notifications.
+        onNext observable  ->  OnNextNotification
+        onComplete observable -> OnCompleteNotification
+        onError observable  -> OnErrorNotification.
+
+        No matter what original type of observable is, it will only trigger the observer's onNext method. This make it constant for writing the
+        handler functions for all kinds of original observables.
+
+        After it completes, the observer's onComplete() function will be called.
+        In the onNext(), we can call notification.getValue() to get the original value. We can also call isOnNext(), isOnError() and isOnComplete()
+        to check the original observable type.
+
+     */
+    public void testUsingMaterialize() {
+        Observable.range(0, 3)
+                .materialize()
+                .subscribe(s -> {System.out.println("OnNext:" + s);},
+                        throwable -> System.out.println("OnError:" + throwable.toString()),
+                        () -> System.out.println("Completed!"));
+    }
+
+    /*
+        This is the reverse process of the materialize operator. It convert a notification into original observable.
+        TODO: Investigate what the functionality of the input function is. 
+     */
+    public void testUsingDeMaterialize() {
+        Observable.range(0, 3)
+                .materialize()
+                .dematerialize(notification -> notification)
+                .subscribe(s -> {System.out.println("OnNext:" + s);},
+                        throwable -> System.out.println("OnError:" + throwable.toString()),
+                        () -> System.out.println("Completed!"));
     }
 
 }
