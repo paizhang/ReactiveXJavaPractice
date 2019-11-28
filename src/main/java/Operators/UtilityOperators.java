@@ -112,7 +112,7 @@ public class UtilityOperators {
 
     /*
         This is the reverse process of the materialize operator. It convert a notification into original observable.
-        TODO: Investigate what the functionality of the input function is. 
+        TODO: Investigate what the functionality of the input function is.
      */
     public void testUsingDeMaterialize() {
         Observable.range(0, 3)
@@ -121,6 +121,21 @@ public class UtilityOperators {
                 .subscribe(s -> {System.out.println("OnNext:" + s);},
                         throwable -> System.out.println("OnError:" + throwable.toString()),
                         () -> System.out.println("Completed!"));
+    }
+
+    /*
+        This operator will convert the source observable which emits items into a observable which emits the time elapsed between emissions of
+        the source items. By default it will return time interval using MILLISECONDS as time unit. But we can change it by specify the time unit
+        in the input parameter.
+     */
+    public void testUsingTimeInterval() throws InterruptedException {
+        Observable.interval(1, TimeUnit.SECONDS)
+                .timeInterval(TimeUnit.SECONDS)
+                .subscribe(s -> {System.out.println("OnNext:" + s);},
+                        throwable -> System.out.println("OnError:" + throwable.toString()),
+                        () -> System.out.println("Completed!"));
+
+        Thread.sleep(10000);
     }
 
 }
