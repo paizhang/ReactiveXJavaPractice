@@ -36,12 +36,24 @@ public class ConditionalAndBooleanOperators {
 
     /*
        This is a simple operation which will check whether or not the source observable emits items that contain the specific item.
-       It will return a Single<Boolean> observable which will emit true if it contains, and false if not. 
+       It will return a Single<Boolean> observable which will emit true if it contains, and false if not.
      */
     public void testUsingContains() {
         Observable.range(1, 6)
                 .contains(6)
                 .subscribe(s -> {System.out.println("OnNext:" + s);},
                         throwable -> System.out.println("OnError:" + throwable.toString()));
+    }
+
+    /*
+        This operator will mirror the source observable exactly if the source observable emit any items. If the source observable completes normally
+        without emitting any items. Then it will emit a default item and terminate the observable.
+     */
+    public void testUsingDefaultIfEmpty() {
+        Observable.empty()
+                .defaultIfEmpty(1)
+                .subscribe(s -> {System.out.println("OnNext:" + s);},
+                        throwable -> System.out.println("OnError:" + throwable.toString()),
+                        () -> System.out.println("Completed!"));
     }
 }
