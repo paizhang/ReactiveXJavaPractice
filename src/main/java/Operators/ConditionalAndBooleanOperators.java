@@ -87,7 +87,7 @@ public class ConditionalAndBooleanOperators {
 
     /*
         This operator will ignore the items emitted from the source observable until such time as the condition you specify becomes false. Then
-        it will start to mirror the source observable.  
+        it will start to mirror the source observable.
      */
     public void testUsingSkipWhile() {
         Observable.range(1, 5)
@@ -95,5 +95,41 @@ public class ConditionalAndBooleanOperators {
                 .subscribe(s -> {System.out.println("OnNext:" + s);},
                     throwable -> System.out.println("OnError:" + throwable.toString()),
                     () -> System.out.println("Completed!"));
+    }
+
+    /*
+        This operator will emit items from the source observable until the specified observable starts to emit items or terminate with error or complete notification.
+     */
+    public void testUsingTakeUntilWithObservable() throws InterruptedException {
+        Observable<Integer> obs = Observable.just(1, 2, 3).delay(3, TimeUnit.SECONDS);
+        Observable.interval(1, TimeUnit.SECONDS)
+                .takeUntil(obs)
+                .subscribe(s -> {System.out.println("OnNext:" + s);},
+                        throwable -> System.out.println("OnError:" + throwable.toString()),
+                        () -> System.out.println("Completed!"));
+        Thread.sleep(10000);
+    }
+
+    /*
+        This operator will emit items until the specified condition return false.
+        TODO: Investigate why this operator does not emit item as expected.
+     */
+    public void testUsingTakeUntilWithCondition() {
+        Observable.range(1, 5)
+                .takeUntil(num -> num <= 3)
+                .subscribe(s -> {System.out.println("OnNext:" + s);},
+                        throwable -> System.out.println("OnError:" + throwable.toString()),
+                        () -> System.out.println("Completed!"));
+    }
+
+    /*
+        This operator will emit items from the source observable until the specified condition return false.
+     */
+    public void testUsingTakeWhile() {
+        Observable.range(1, 5)
+                .takeWhile(num -> num <= 3)
+                .subscribe(s -> {System.out.println("OnNext:" + s);},
+                        throwable -> System.out.println("OnError:" + throwable.toString()),
+                        () -> System.out.println("Completed!"));
     }
 }
