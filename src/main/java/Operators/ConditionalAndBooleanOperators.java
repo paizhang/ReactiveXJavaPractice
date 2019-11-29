@@ -20,7 +20,7 @@ public class ConditionalAndBooleanOperators {
 
     /*
         Given two or more observables, the function of this operator is to only emit items of the observable who emit the first item among all
-        source observables. 
+        source observables.
      */
     public void testUsingAmb() throws InterruptedException {
         Observable<Long> ob1 = Observable.interval(1, TimeUnit.SECONDS).delay(1, TimeUnit.SECONDS);
@@ -32,5 +32,16 @@ public class ConditionalAndBooleanOperators {
                         () -> System.out.println("Completed!"));
 
         Thread.sleep(10000);
+    }
+
+    /*
+       This is a simple operation which will check whether or not the source observable emits items that contain the specific item.
+       It will return a Single<Boolean> observable which will emit true if it contains, and false if not. 
+     */
+    public void testUsingContains() {
+        Observable.range(1, 6)
+                .contains(6)
+                .subscribe(s -> {System.out.println("OnNext:" + s);},
+                        throwable -> System.out.println("OnError:" + throwable.toString()));
     }
 }
