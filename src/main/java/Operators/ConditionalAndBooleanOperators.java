@@ -56,4 +56,18 @@ public class ConditionalAndBooleanOperators {
                         throwable -> System.out.println("OnError:" + throwable.toString()),
                         () -> System.out.println("Completed!"));
     }
+
+    /*
+        This operator will compare two input observables. If these two observables emit the same items in the same order with the same termination
+        state, then it will emit a true item. Otherwise, it will return a false item.
+        The type of return is Observable<Boolean>.
+     */
+    public void testUsingSequenceEqual() {
+        Observable<Integer> ob1 = Observable.just(1, 2, 3, 4, 5);
+        Observable<Integer> ob2 = Observable.just(1, 2, 3, 4, 5, 6);
+
+        Observable.sequenceEqual(ob1, ob2)
+                .subscribe(s -> {System.out.println("OnNext:" + s);},
+                        throwable -> System.out.println("OnError:" + throwable.toString()));
+    }
 }
