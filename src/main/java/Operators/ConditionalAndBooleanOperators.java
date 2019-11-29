@@ -72,7 +72,7 @@ public class ConditionalAndBooleanOperators {
     }
 
     /*
-        This operator will skip items emitted by an observable until another observable starts to emit items. 
+        This operator will skip items emitted by an observable until another observable starts to emit items.
      */
     public void testUsingSkipUntil() throws InterruptedException {
         Observable<Integer> obs = Observable.just(1, 2, 3).delay(3, TimeUnit.SECONDS);
@@ -83,5 +83,17 @@ public class ConditionalAndBooleanOperators {
                         () -> System.out.println("Completed!"));
 
         Thread.sleep(10000);
+    }
+
+    /*
+        This operator will ignore the items emitted from the source observable until such time as the condition you specify becomes false. Then
+        it will start to mirror the source observable.  
+     */
+    public void testUsingSkipWhile() {
+        Observable.range(1, 5)
+                .skipWhile(num -> num < 3)
+                .subscribe(s -> {System.out.println("OnNext:" + s);},
+                    throwable -> System.out.println("OnError:" + throwable.toString()),
+                    () -> System.out.println("Completed!"));
     }
 }
