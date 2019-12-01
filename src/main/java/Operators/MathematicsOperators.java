@@ -16,4 +16,13 @@ public class MathematicsOperators {
         MathObservable.averageDouble(obs)
                 .subscribe((num) -> System.out.println(num));
     }
+
+    /*
+        This operator output the max value of emitted items.
+     */
+    public void testUsingMax() {
+        Observable<Integer> obs = Observable.just(1, 2, 3, 4, 5);
+        MathObservable.max(obs)
+                .subscribe(num -> System.out.println("Max: " + num));
+    }
 }
