@@ -2,12 +2,14 @@ package Operators;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
+import io.reactivex.functions.BiConsumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
 public class TransformingOperators {
@@ -113,11 +115,31 @@ public class TransformingOperators {
     /*
         This operator apply a function to items emitted by a observable sequentially and output the final result.
         This operator is similar with scan operator. The only difference is that scan operator output the results for each step. And
-        reduce operator only outputs the final result. 
+        reduce operator only outputs the final result.
      */
     public void testUsingReduce() {
         Observable.range(1, 5)
                 .reduce((x, y) -> x + y)
                 .subscribe(num -> System.out.println(num));
+    }
+
+    /*
+        This operator collect each individual elements into a collection. The return value of this operator is a Single observable with the type
+        of that collection.
+     */
+    public void testUsingCollect() {
+        Observable.range(1, 5)
+                .collect(new Callable<ArrayList<Integer>>() {
+                    @Override
+                    public ArrayList<Integer> call() {
+                        return new ArrayList<Integer>();
+                    }
+                }, new BiConsumer<ArrayList<Integer>, Integer>() {
+                    @Override
+                    public void accept(ArrayList<Integer> integers, Integer integer) throws Exception {
+                        integers.add(integer);
+                    }
+                })
+        .subscribe(nums -> System.out.println(String.valueOf(nums)));
     }
 }
