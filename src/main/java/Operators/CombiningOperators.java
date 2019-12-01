@@ -199,4 +199,19 @@ public class CombiningOperators {
                 .zipWith(obs1, (item1, item2) -> item1 + ":" + item2)
                 .subscribe(s -> System.out.println(s));
     }
+
+    /*
+        This operator is used to concatenate multiple source observables into a single observable which emits items based on the order of
+        emission of the source observables. It will subscrible to a new observable after the previous subscribed observable terminates.  
+     */
+    public void testUsingConcat() throws InterruptedException {
+        Observable<Integer> obs1 = Observable.range(1, 5);
+        Observable<Integer> obs2 = Observable.range(10, 5).delay(2000, TimeUnit.MILLISECONDS);
+        Observable<Integer> obs3 = Observable.range(20, 5).delay(3000, TimeUnit.MILLISECONDS);
+
+        Observable.concat(obs1, obs2, obs3)
+                .subscribe(num -> System.out.println(num));
+
+        Thread.sleep(10000);
+    }
 }
