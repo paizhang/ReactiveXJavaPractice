@@ -109,4 +109,15 @@ public class TransformingOperators {
                 .subscribe(s -> System.out.println(s));
         Thread.sleep(100000);
     }
+
+    /*
+        This operator apply a function to items emitted by a observable sequentially and output the final result.
+        This operator is similar with scan operator. The only difference is that scan operator output the results for each step. And
+        reduce operator only outputs the final result. 
+     */
+    public void testUsingReduce() {
+        Observable.range(1, 5)
+                .reduce((x, y) -> x + y)
+                .subscribe(num -> System.out.println(num));
+    }
 }
