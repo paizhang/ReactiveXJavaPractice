@@ -34,4 +34,13 @@ public class MathematicsOperators {
         MathObservable.min(obs)
                 .subscribe(num -> System.out.println("Min: " + num));
     }
+
+    /*
+        This operator will sum up values of emitted items.
+     */
+    public void testUsingSum() {
+        Observable<Integer> obs = Observable.just(1, 2, 3, 4, 5);
+        MathObservable.sumInt(obs)
+                .subscribe(num -> System.out.println("Sum: " + num));
+    }
 }
