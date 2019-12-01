@@ -132,4 +132,13 @@ public class ConditionalAndBooleanOperators {
                         throwable -> System.out.println("OnError:" + throwable.toString()),
                         () -> System.out.println("Completed!"));
     }
+
+    /*
+        This operator counts the number of items emitted from the source observable. 
+     */
+    public void testUsingCount() {
+        Observable.just(1, 4, 3, 5, 7)
+                .count()
+                .subscribe(num -> System.out.println(num));
+    }
 }
