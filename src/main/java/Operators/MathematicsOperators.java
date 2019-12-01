@@ -25,4 +25,13 @@ public class MathematicsOperators {
         MathObservable.max(obs)
                 .subscribe(num -> System.out.println("Max: " + num));
     }
+
+    /*
+        This operator output the min value of emitted items.
+     */
+    public void testUsingMin() {
+        Observable<Integer> obs = Observable.just(1, 2, 3, 4, 5);
+        MathObservable.min(obs)
+                .subscribe(num -> System.out.println("Min: " + num));
+    }
 }
