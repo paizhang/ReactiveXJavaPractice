@@ -18,7 +18,10 @@ public class FlowableUsage {
         The main strategy that Flowable handling backpressure is reactive pull strategy. The subscriber can use subscription.request(n) to
         reactively pull items from the flowable. Thus the traffic rate can be control on the subscriber side.
 
-        Observable can also apply sample operator or window operator to handle backpressure by dropping or buffering some items. 
+        Observable can also apply sample operator or window operator to handle backpressure by dropping or buffering some items.
+
+        TODO: I tried to emit 10^9 items per second and consume 3 items per second using Observable. But it seems it can still handle properly without throwing MissingBackpressureException exception.
+        Find a way to test it again to find out the limit of observable and the ways to monitor the performance. 
      */
     public void testUsingFlowable() throws InterruptedException {
         Flowable<Long> flowable = Flowable.interval(1, TimeUnit.MILLISECONDS);
