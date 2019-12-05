@@ -2,8 +2,8 @@ package ConnectableObservable;
 
 public class MainClass {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         ConnectableObservableOperator connectableObservableOperator = new ConnectableObservableOperator();
-        connectableObservableOperator.testUsingPublishAndSubscribeAndConnect();
+        connectableObservableOperator.testUsingReplyAndSubscribeAndConnect();
     }
 }
