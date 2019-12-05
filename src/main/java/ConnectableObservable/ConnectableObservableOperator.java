@@ -87,7 +87,22 @@ public class ConnectableObservableOperator {
         Thread.sleep(5000);
         observable.subscribe(num -> System.out.println("Thread: " + Thread.currentThread().getName() + " Second observer:" + num));
         Thread.sleep(10000);
-        
+
+    }
+
+    /*
+        Autoconnect() is like the refCount() which will convert the ConnectableObservable into a Observable. The difference is that observable created using
+        autoConnect() will only emit items when it has specified number of subscribers. And after it starts emitting items, it will not stop emitting
+        items even the number of subcribers is below the specified number.
+     */
+    public void testUsingAutoconnect() throws InterruptedException {
+        Observable<Long> observable = Observable.interval(1, TimeUnit.SECONDS).publish().autoConnect(2);
+        observable.subscribe(num -> System.out.println("Thread: " + Thread.currentThread().getName() + " First observer:" + num));
+        Thread.sleep(5000);
+        Disposable disposable = observable.subscribe(num -> System.out.println("Thread: " + Thread.currentThread().getName() + " Second observer:" + num));
+        Thread.sleep(5000);
+        disposable.dispose();
+        Thread.sleep(10000);
     }
 
 }
