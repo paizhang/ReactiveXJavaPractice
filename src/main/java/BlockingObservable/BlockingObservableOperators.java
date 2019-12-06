@@ -1,6 +1,8 @@
 package BlockingObservable;
 
 import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
 
 public class BlockingObservableOperators {
 
@@ -14,5 +16,25 @@ public class BlockingObservableOperators {
         observable.subscribe(n -> System.out.println(n));
         System.out.println(num);
     }
-    
+
+    /*
+        BlockingLast operator will block the main thread until it return the last item with its original type. 
+     */
+    public void testUsingBlockingLast() {
+        Observable<Integer> observable = Observable.create(new ObservableOnSubscribe<Integer>() {
+            @Override
+            public void subscribe(ObservableEmitter<Integer> observableEmitter) throws Exception {
+                observableEmitter.onNext(1);
+                Thread.sleep(2000);
+                observableEmitter.onNext(2);
+                Thread.sleep(2000);
+                observableEmitter.onNext(3);
+                Thread.sleep(2000);
+                observableEmitter.onComplete();
+            }
+        });
+        Integer lastNum = observable.blockingLast();
+        System.out.println("Last item using blockingLast: " + lastNum);
+        observable.subscribe(num -> System.out.println("In subscriber:" + num));
+    }
 }
