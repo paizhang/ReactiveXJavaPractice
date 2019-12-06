@@ -18,7 +18,7 @@ public class BlockingObservableOperators {
     }
 
     /*
-        BlockingLast operator will block the main thread until it return the last item with its original type. 
+        BlockingLast operator will block the main thread until it return the last item with its original type.
      */
     public void testUsingBlockingLast() {
         Observable<Integer> observable = Observable.create(new ObservableOnSubscribe<Integer>() {
@@ -36,5 +36,14 @@ public class BlockingObservableOperators {
         Integer lastNum = observable.blockingLast();
         System.out.println("Last item using blockingLast: " + lastNum);
         observable.subscribe(num -> System.out.println("In subscriber:" + num));
+    }
+
+    /*
+        BlockingIterable will return an iterable for items emitted from the observable. 
+     */
+    public void testUsingBlockingIterator() {
+        Observable<Integer> observable = Observable.just(1, 2, 3, 4, 5);
+        Iterable it = observable.blockingIterable();
+        it.forEach(num -> System.out.println(num));
     }
 }
